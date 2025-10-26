@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "tailwindcss/utilities";
+
+@layer utilities {
+    .font-protest {
+        font-family: 'Protest Guerrilla', sans-serif;
+    }
+    .font-poppins {
+        font-family: 'Poppins', sans-serif;
+    }
+}

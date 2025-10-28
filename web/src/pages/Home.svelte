@@ -1,5 +1,7 @@
 <script lang="ts">
     import { onMount, tick } from 'svelte';
+    import {session} from "../util/session";
+    import {supabase} from "../util/supabase";
 
     let {nav}: { nav: (to: string) => void } = $props()
 
@@ -280,10 +282,8 @@
             </div>
         </div>
     {:else}
-        <img src="/placeholder.png" alt="Placeholder" class="absolute top-[50px] right-[50px] w-[100px] h-[100px] object-cover pointer-events-none select-none" data-obstacle />
-
         <div class="flex flex-col bottom-[100px] left-[100px] absolute gap-[12px]" data-obstacle>
-            <button type="button" class={btnClass} onclick={() => { nav('/create'); }}>
+            <button type="button" class={btnClass} onclick={() => { window.location.href="/#/lobby/new" }}>
                 <span class="flex items-center gap-4">
                   <span>new game</span>
                 </span>

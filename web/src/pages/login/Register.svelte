@@ -1,49 +1,37 @@
 <script lang="ts">
     import { supabase } from '../../util/supabase';
-    import {onMount} from "svelte";
 
     let username = '';
+    let email = '';
     let password = '';
     let loading = false;
     let errorMsg = '';
 
-    onMount(async () => {
-        console.log('about to query');
-        const { data, error: fetchError } = await supabase
-            .from('profiles')
-            .select('email')
-            .eq('username', "pussylicious")
-            .single()
-        console.log('done', data, fetchError);
-    });
-
-
-    async function handleLogin() {
+    async function handleRegister() {
         loading = true;
         errorMsg = '';
 
-        // Find the profile for this username
-        const { data, error: fetchError } = await supabase
-            .from('profiles')
-            .select('email')
-            .eq('username', username)
-            .single()
-
-        if (fetchError || !data?.email) {
-            errorMsg = 'Username not found';
+        // Register via Supabase
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) {
+            errorMsg = error.message;
             loading = false;
-            console.log(fetchError)
             return;
         }
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email: data.email,
-            password
-        });
+        const uid = data.user?.id;
+        let profileErr;
+        if (uid) {
+            // Insert username
+            const { error: insertError } = await supabase
+                .from('profiles')
+                .insert([{ id: uid, username, email: email }]);
+            if (insertError) profileErr = insertError.message;
+        }
 
         loading = false;
-        if (error) errorMsg = error.message;
-        else window.location.href = '/#/';
+        if (profileErr) errorMsg = profileErr;
+        else window.location.href = '/#/login';
     }
 </script>
 
@@ -52,12 +40,18 @@
 
     <div class="bg-[#141414] rotate-[-5deg] w-[65vw] h-[60vh] flex flex-row justify-between items-start p-[80px]">
         <div class="flex flex-col items-start justify-between h-full">
-            <h1 class="font-medium text-[64px] text-white font-poppins">login</h1>
+            <h1 class="font-medium text-[64px] text-white font-poppins">register</h1>
             <div class="flex flex-col gap-[10px]">
                 <input
                         type="text"
                         placeholder="username"
                         bind:value={username}
+                        class="bg-[#1E1E1E] font-poppins w-[500px] px-[40px] py-[20px] text-white text-[32px] focus:outline-none"
+                />
+                <input
+                        type="email"
+                        placeholder="email"
+                        bind:value={email}
                         class="bg-[#1E1E1E] font-poppins w-[500px] px-[40px] py-[20px] text-white text-[32px] focus:outline-none"
                 />
                 <input
@@ -74,13 +68,12 @@
 
         <div class="flex flex-col gap-[10px] items-end justify-end h-full">
             <button
-                    class="bg-[#E1FF00] px-[100px] py-[20px] cursor-pointer hover:rounded-full text-black font-poppins text-[64px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out"
-                    on:click={handleLogin}
+                    class="bg-[#F2CE32] px-[100px] py-[20px] cursor-pointer hover:rounded-full text-black font-poppins text-[64px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out"
+                    on:click={handleRegister}
                     disabled={loading}
             >
-                {loading ? '...' : 'login'}
+                {loading ? '...' : 'register'}
             </button>
-            <a href="/#/register" class="font-poppins text-[#A0FF11] text-[24px] underline underline-offset-4 mt-4">don't have an account? register</a>
         </div>
     </div>
 </div>

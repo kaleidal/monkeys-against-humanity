@@ -2,15 +2,25 @@
   import Home from "./pages/Home.svelte";
   import Login from "./pages/login/Login.svelte";
   import Router from "svelte-spa-router";
-  import Lobby from "./pages/lobby/Lobby.svelte";
   import JoinLobby from "./pages/lobby/JoinLobby.svelte";
+  import {supabase} from "./util/supabase";
+  import {session} from "./util/session";
+  import Register from "./pages/login/Register.svelte";
+  import LobbyHost from "./pages/lobby/LobbyHost.svelte";
 
   const Routes = {
       "/": Home,
       "/login": Login,
-      "/lobby": Lobby,
+      "/register": Register,
+      "/lobby/new": LobbyHost,
       "/lobby/join": JoinLobby
   }
+
+  supabase.auth.getSession().then(async ({ data }) => {
+      const user = data.session?.user || null;
+
+      session.set({ user });
+  });
 </script>
 
 <div class="relative bg-[#090909] min-h-screen w-full overflow-hidden select-none">

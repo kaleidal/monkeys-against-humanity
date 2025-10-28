@@ -11,11 +11,20 @@
 
     const lobbyPlayers = writable<any[]>([]);
 
-    const cardPacks = [
-        { name: "Freaky", selected: true, key: "freaky" },
-        { name: "Brainrot", selected: false, key: "brainrot" },
-        { name: "Black", selected: false, key: "black" },
-    ];
+    const modules = import.meta.glob('/src/packs/*.ts', { eager: true });
+
+    const packs = Object.keys(modules).map((path) => {
+        const name = (path.split('/').pop() || '').replace('.ts', '');
+        return { name, data: modules[path] };
+    });
+    let cardPacks = packs.map((pack) => {
+        return {
+            key: pack.name,
+            name: pack.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+            selected: false,
+            data: pack.data
+        };
+    });
 
     const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let lobbyCode = '';
@@ -179,6 +188,34 @@
 
         window.location.href = `/#/game/${lobbyId}`;
     }
+
+    function getPackBg(key: string) {
+        return `/card_packs/${key}.png`;
+    }
+    
+    let cardsSearch = '';
+    $: if (cardsSearch.trim() !== '') {
+        const searchLower = cardsSearch.toLowerCase();
+        cardPacks = packs
+            .map((pack) => {
+                return {
+                    key: pack.name,
+                    name: pack.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                    selected: cardPacks.find(p => p.key === pack.name)?.selected || false,
+                    data: pack.data
+                };
+            })
+            .filter(pack => pack.name.toLowerCase().includes(searchLower));
+    } else {
+        cardPacks = packs.map((pack) => {
+            return {
+                key: pack.name,
+                name: pack.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                selected: cardPacks.find(p => p.key === pack.name)?.selected || false,
+                data: pack.data
+            };
+        });
+    }
 </script>
 
 {#if loading}
@@ -189,10 +226,9 @@
         <p class="text-xl font-poppins">{errorMsg}</p>
     </div>
 {:else}
-
     <div class="flex gap-8 justify-center items-start min-h-screen bg-black p-[80px] text-white">
-        <section class="flex flex-col h-[85vh] justify-between">
-            <div class="flex flex-col gap-[100px] bg-neutral-900 p-[60px] w-[30vw]">
+        <section class="flex flex-col h-[85vh] gap-[40px] justify-between">
+            <div class="flex flex-col gap-[100px] bg-neutral-900 p-[60px] w-[30vw] flex-grow justify-between">
                 <div class="flex flex-col gap-[10px]">
                     <h1 class="text-[32px] font-normal font-poppins">players</h1>
                     <Slider min={1} max={8} step={1} bind:value={maxPlayers} />
@@ -223,21 +259,21 @@
 
         <section class="flex flex-col gap-4 bg-neutral-900 p-[60px] py-[50px] w-[43vw] h-[85vh]">
             <h1 class="text-[32px] font-normal font-poppins">card packs</h1>
+            <input type="text" placeholder="search card packs..." class="bg-[#1E1E1E] font-poppins w-full px-[20px] py-[15px] text-white text-[24px] focus:outline-none" bind:value={cardsSearch} />
 
-            {#each cardPacks as pack}
-                <button class="flex flex-row justify-center items-center h-[240px] cursor-pointer {pack.selected ? 'border-8 border-[#E1FF00]' : ''}" onclick={() => { pack.selected = !pack.selected; }}>
-                    <img
-                            src="/card_packs/{pack.key}.png"
-                            alt="page icon"
-                            class="inset-0 w-full pointer-events-none select-none transition-all duration-300 opacity-40 hover:greyscale-[50%] hover:opacity-80"
-                            class:filter={!pack.selected}
-                            class:grayscale={!pack.selected}
-                            style="height: 100%; object-fit: fill;"
-                    />
-
-                    <h1 class="text-[96px] font-bold font-poppins absolute self-center {pack.selected ? 'text-[#FFFFFF]' : 'text-[#A8A8A8]'}">{pack.name}</h1>
-                </button>
-            {/each}
+            <div class="flex flex-col gap-[10px] overflow-y-scroll scroll-smooth hide-scrollbar">
+                {#each cardPacks as pack}
+                    <button
+                            class="flex flex-col justify-center items-center min-h-[240px] cursor-pointer relative overflow-hidden {pack.selected ? 'border-8 border-[#E1FF00]' : ''}"
+                            style="background-image: url('{getPackBg(pack.key)}'); background-size: cover; background-position: center;"
+                            onclick={() => { pack.selected = !pack.selected; }}>
+                        <div class="absolute inset-0 bg-black/50"></div>
+                        <h1 class="relative z-10 text-[48px] font-bold font-poppins {pack.selected ? 'text-[#FFFFFF]' : 'text-[#A8A8A8]'}">
+                            {pack.name}
+                        </h1>
+                    </button>
+                {/each}
+            </div>
         </section>
 
         <section class="flex flex-col gap-4 bg-neutral-900 p-[40px] w-[27vw] h-[85vh]">

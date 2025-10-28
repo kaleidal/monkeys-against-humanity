@@ -13,11 +13,14 @@
       "/login": Login,
       "/register": Register,
       "/lobby/new": LobbyHost,
-      "/lobby/join": JoinLobby
+      "/lobby/join": JoinLobby,
   }
 
   supabase.auth.getSession().then(async ({ data }) => {
       const user = data.session?.user || null;
+      if (!user) {
+          window.location.href = "/#/login";
+      }
 
       session.set({ user });
   });

@@ -7,6 +7,8 @@
   import {session} from "./util/session";
   import Register from "./pages/login/Register.svelte";
   import LobbyHost from "./pages/lobby/LobbyHost.svelte";
+  import LobbyPlayer from "./pages/lobby/LobbyPlayer.svelte";
+  import Game from "./pages/lobby/in_game/Game.svelte";
 
   const Routes = {
       "/": Home,
@@ -14,6 +16,8 @@
       "/register": Register,
       "/lobby/new": LobbyHost,
       "/lobby/join": JoinLobby,
+      "/lobby/:id": LobbyPlayer,
+      "/game/:id": Game,
   }
 
   supabase.auth.getSession().then(async ({ data }) => {

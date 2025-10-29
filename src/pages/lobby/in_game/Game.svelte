@@ -234,6 +234,7 @@
         try { roundsCh && supabase.removeChannel(roundsCh); } catch {}
         try { subsCh && supabase.removeChannel(subsCh); } catch {}
         try { playersCh && supabase.removeChannel(playersCh); } catch {}
+        supabase.from("players").delete().eq('lobby_id', lobbyId).eq('user_id', me);
     });
 </script>
 
@@ -266,7 +267,7 @@
                 {#if mySubmitted}
                     <div class="min-h-screen text-white bg-black flex flex-col items-center justify-center gap-3">
                         <div class="text-[32px]">Waiting for other players to submit...</div>
-                        <div class="text-[24px] text-gray-400">You have submitted your card.</div>
+                        <div class="text-[24px] text-[#E1FF00]">You have submitted your card.</div>
                     </div>
                 {:else}
                     <PlayerChooseCard packsKeys={packsKeys} prompt={currentRound.prompt || ''} onSelect={onPlayerSubmit} players={players} tsarUuid={currentRound.tsar_user_id} submittedIds={submittedIds} />

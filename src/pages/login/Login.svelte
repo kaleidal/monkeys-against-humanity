@@ -28,8 +28,14 @@
         });
 
         loading = false;
-        if (error) errorMsg = error.message;
-        else window.location.href = '/#/';
+        if (error) {
+            errorMsg = error.message;
+            return;
+        }
+
+        window.location.reload();
+        window.location.href = '/#/';
+        window.location.reload();
     }
 </script>
 

@@ -30,8 +30,14 @@
         }
 
         loading = false;
-        if (profileErr) errorMsg = profileErr;
-        else window.location.href = '/#/login';
+        if (profileErr) {
+            errorMsg = profileErr;
+            return;
+        }
+
+        window.location.reload();
+        window.location.href = '/#/login';
+        window.location.reload();
     }
 </script>
 

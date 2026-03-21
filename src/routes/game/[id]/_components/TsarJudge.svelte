@@ -12,22 +12,20 @@
     }
 </script>
 
-<div class="w-full min-h-screen bg-[#090909] flex flex-col items-center justify-center gap-[60px] p-[100px] relative overflow-hidden select-none">
+<div class="w-full min-h-screen bg-[#090909] flex flex-col items-center justify-center gap-[28px] md:gap-[40px] p-[24px] md:p-[40px] relative overflow-hidden select-none">
     <img src="/illustrations/tsar_judge.png" alt="Lobby Monsters" class="absolute top-0 left-0 pointer-events-none" />
 
-    <button
-        class="h-[350px] w-[250px] bg-[#E1FF00] rounded-[40px] shadow-[0_4px_15px_rgba(0,0,0,0.3)] ease-in-out flex items-start justify-start p-[40px] py-[35px] text-left"
-    >
-        <p class="text-[24px] font-poppins text-black font-medium">{prompt}</p>
+    <button class="h-[260px] md:h-[320px] w-[200px] md:w-[240px] bg-[#E1FF00] rounded-[28px] md:rounded-[32px] shadow-[0_4px_15px_rgba(0,0,0,0.3)] ease-in-out flex items-start justify-start p-[20px] md:p-[28px] text-left">
+        <p class="text-[18px] md:text-[22px] font-poppins text-black font-medium">{prompt}</p>
     </button>
 
-    <div class="flex flex-row gap-[40px] w-full flex-wrap justify-center">
+    <div class="flex flex-row gap-[16px] md:gap-[20px] w-full max-w-[1200px] flex-wrap justify-center">
         {#each submissions as s}
             <button
-                class="h-[350px] w-[250px] rounded-[40px] shadow-[0_4px_15px_rgba(0,0,0,0.3)] {canPick ? 'bg-white cursor-pointer hover:scale-[1.05] hover:rotate-[-3deg] transition-all duration-300 active:scale-[0.95]' : 'bg-[#AAAAAA]'} ease-in-out flex items-start justify-start p-[40px] py-[35px] text-left"
+                class="h-[260px] md:h-[320px] w-[200px] md:w-[240px] rounded-[28px] md:rounded-[32px] shadow-[0_4px_15px_rgba(0,0,0,0.3)] {canPick ? 'bg-white cursor-pointer hover:scale-[1.05] hover:rotate-[-3deg] transition-all duration-300 active:scale-[0.95]' : 'bg-[#AAAAAA]'} ease-in-out flex items-start justify-start p-[20px] md:p-[28px] text-left"
                 onclick={() => pick(s.id)}
             >
-                <p class="text-[24px] font-poppins text-black font-medium">{s.answer}</p>
+                <p class="text-[18px] md:text-[22px] font-poppins text-black font-medium">{s.answer}</p>
             </button>
         {/each}
     </div>

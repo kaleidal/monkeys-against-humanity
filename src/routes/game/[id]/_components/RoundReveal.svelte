@@ -24,26 +24,26 @@
         : null;
 </script>
 
-<div class="w-full min-h-screen bg-[#090909] text-white p-[5vw] flex flex-row justify-center gap-8 md:gap-12 items-center overflow-x-hidden">
+<div class="w-full min-h-screen bg-[#090909] text-white p-[24px] md:p-[40px] flex flex-col md:flex-row justify-center gap-8 md:gap-10 items-center overflow-x-hidden">
     {#if winningId && winnerSubmission && winnerPlayer}
-        <div class="w-[600px] h-[400px] mb-8 flex flex-row">
-            <div class="h-[400px] w-[270px] top-4 left-2 bg-[#E1FF00] text-black rounded-[32px] font-poppins font-medium p-[40px] py-[35px] text-[24px] z-10">
+        <div class="w-full max-w-[520px] h-[300px] md:h-[340px] mb-4 md:mb-0 flex flex-row justify-center">
+            <div class="h-[300px] md:h-[340px] w-[190px] md:w-[220px] top-4 left-2 bg-[#E1FF00] text-black rounded-[24px] md:rounded-[28px] font-poppins font-medium p-[20px] md:p-[28px] text-[18px] md:text-[22px] z-10">
                 {prompt}
             </div>
 
-            <div class="mt-[20%] -ml-[10%] h-[400px] w-[270px] top-12 left-12 rotate-[20deg] bg-white text-black rounded-[32px] p-[40px] py-[35px] font-poppins font-medium text-[24px] z-20">
+            <div class="mt-[16%] -ml-[8%] h-[300px] md:h-[340px] w-[190px] md:w-[220px] top-12 left-12 rotate-[20deg] bg-white text-black rounded-[24px] md:rounded-[28px] p-[20px] md:p-[28px] font-poppins font-medium text-[18px] md:text-[22px] z-20">
                 {winnerSubmission.answer}
             </div>
         </div>
 
         <div class="inset-0 flex flex-col items-center justify-center">
-          <span class="text-[96px] font-poppins w-[50vw] font-medium text-white">
+          <span class="text-[44px] md:text-[62px] leading-tight text-center font-poppins w-full max-w-[560px] font-medium text-white">
             {$t('roundRevealWinsRound', { name: winnerPlayer.username })}
           </span>
 
             {#if canContinue}
                 <button
-                    class="bg-[#E1FF00] w-full z-100 px-[40px] py-[14px] md:py-[20px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[64px] flex items-center justify-center tracking-wide active:scale-[0.98] ease-in-out disabled:opacity-60 disabled:cursor-not-allowed"
+                    class="bg-[#E1FF00] w-full max-w-[560px] z-100 px-[40px] py-[14px] md:py-[16px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[48px] flex items-center justify-center tracking-wide active:scale-[0.98] ease-in-out disabled:opacity-60 disabled:cursor-not-allowed"
                     disabled={loading}
                     onclick={onNext}
                 >

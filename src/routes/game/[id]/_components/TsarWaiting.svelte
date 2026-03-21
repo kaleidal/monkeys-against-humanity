@@ -34,11 +34,11 @@
         {/each}
     </section>
 
-    <div class="h-full w-full md:w-[60vw] flex flex-col items-center justify-center gap-[4vw]">
-        <div class="h-[300px] md:h-[400px] w-[220px] md:w-[300px] bg-[#E1FF00] rounded-[24px] md:rounded-[40px] flex items-start justify-start p-6 md:p-[40px] text-left">
+    <div class="h-full w-full md:w-[60vw] flex flex-col items-center justify-center gap-[24px] md:gap-[36px]">
+        <div class="h-[260px] md:h-[320px] w-[200px] md:w-[240px] bg-[#E1FF00] rounded-[24px] md:rounded-[32px] flex items-start justify-start p-6 md:p-[28px] text-left">
             <p class="text-[18px] md:text-[24px] font-poppins text-black font-medium">{prompt || $t('tsarWaitingFallback')}</p>
         </div>
 
-        <h1 class="text-[24px] md:text-[36px] text-white font-poppins font-medium">{$t('tsarWaitingMessage')}</h1>
+        <h1 class="text-[24px] md:text-[32px] text-white font-poppins font-medium text-center">{$t('tsarWaitingMessage')}</h1>
     </div>
 </div>

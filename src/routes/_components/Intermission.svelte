@@ -28,7 +28,7 @@
     }
 </script>
 
-<div class="bg-[#090909] min-h-screen w-full overflow-y-hidden select-none flex flex-col items-center justify-center gap-[100px]">
+<div class="bg-[#090909] min-h-screen w-full overflow-y-hidden select-none flex flex-col items-center justify-center gap-[56px] md:gap-[72px] p-[24px]">
     <img src="/illustrations/intermission_monster.png" alt="Intermission Monster" class="pointer-events-none" />
 
     <p class="font-poppins text-[32px] text-[#7B7B7B] text-center">{$t(getRandomText())}</p>

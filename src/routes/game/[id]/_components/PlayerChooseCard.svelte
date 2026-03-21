@@ -34,8 +34,8 @@
     }
 </script>
 
-<div class="w-full min-h-screen bg-[#090909] text-white p-[24px] md:p-[48px] flex flex-col md:flex-row gap-[24px] md:gap-[6vw]">
-    <section class="flex flex-col gap-3 bg-neutral-900 p-[24px] md:p-[32px] w-full md:w-[22vw] md:self-stretch overflow-y-auto">
+<div class="w-full min-h-screen bg-[#090909] text-white p-[24px] md:p-[40px] flex flex-col md:flex-row gap-[24px] md:gap-[24px] relative">
+    <section class="flex flex-col gap-3 bg-neutral-900 p-[24px] md:p-[32px] w-full md:w-[clamp(260px,23vw,360px)] md:self-stretch overflow-y-auto">
         <h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('tsarWaitingPlayers')}</h1>
         {#each players as player}
             <div class="flex flex-row justify-between items-center bg-[#282828] px-4 py-2">
@@ -61,15 +61,15 @@
         {/each}
     </section>
 
-    <img src="/illustrations/player_choose.png" alt="player choosing" class="absolute top-0 left-[20vw] w-[70vw] md:w-[40vw] absolute -top-[8vw] left-[10vw] md:top-0 md:left-[25vw] h-auto pointer-events-none select-none opacity-80" />
+    <img src="/illustrations/player_choose.png" alt="player choosing" class="absolute top-0 left-[20vw] w-[70vw] md:w-[36vw] -top-[8vw] left-[10vw] md:top-0 md:left-[22vw] h-auto pointer-events-none select-none opacity-80" />
 
-    <div class="absolute right-[5vh] top-[5vh] h-[300px] md:h-[400px] w-[220px] md:w-[300px] bg-[#E1FF00] rounded-[24px] md:rounded-[40px] items-start justify-start p-6 md:p-[40px] text-left">
+    <div class="absolute right-[5vh] top-[5vh] h-[260px] md:h-[320px] w-[200px] md:w-[240px] bg-[#E1FF00] rounded-[24px] md:rounded-[32px] items-start justify-start p-6 md:p-[28px] text-left">
         <p class="text-[18px] md:text-[24px] font-poppins text-black font-medium">{prompt}</p>
     </div>
 
-    <div class="absolute bottom-[8vh] left-[31vw] z-10 gap-[12px] flex flex-row w-[65vw] gap-[10px] justify-between items-start">
+    <div class="absolute bottom-[6vh] left-[29vw] z-10 flex flex-row w-[66vw] gap-[10px] justify-between items-start">
         {#each selectedAnswers as card}
-            <button class="flex-grow basis-[42%] md:basis-auto h-[200px] md:h-[350px] w-[180px] md:w-[200px] bg-[#EEEEEE] rounded-[24px] md:rounded-[40px] cursor-pointer hover:scale-[1.03] hover:rotate-[-2deg] md:hover:rotate-[-3deg] transition-all duration-300 active:scale-[0.97] ease-in-out flex items-start justify-start p-4 md:p-[40px] text-left" onclick={() => choose(card)}>
+            <button class="flex-grow basis-[42%] md:basis-auto h-[200px] md:h-[300px] w-[180px] md:w-[190px] bg-[#EEEEEE] rounded-[24px] md:rounded-[32px] cursor-pointer hover:scale-[1.03] hover:rotate-[-2deg] md:hover:rotate-[-3deg] transition-all duration-300 active:scale-[0.97] ease-in-out flex items-start justify-start p-4 md:p-[28px] text-left" onclick={() => choose(card)}>
                 <span class="text-[16px] md:text-[24px] font-poppins text-black font-medium">{card}</span>
             </button>
         {/each}

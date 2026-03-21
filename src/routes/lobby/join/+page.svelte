@@ -59,12 +59,12 @@
 	}
 </script>
 
-<div class="bg-[#090909] min-h-screen w-full overflow-hidden select-none flex items-center justify-center p-[6vw] md:p-[150px]">
+<div class="bg-[#090909] min-h-screen w-full overflow-hidden select-none flex items-center justify-center p-[6vw] md:p-[40px]">
 	<img src="/illustrations/monsters_join_bottom.svg" alt="Join Monster" class="hidden md:block absolute bottom-0 left-0 pointer-events-none max-w-[40vw]" />
 	<img src="/illustrations/monsters_join_top.svg" alt="Join Monster" class="hidden md:block absolute top-0 right-0 pointer-events-none max-w-[40vw]" />
 
-	<div class="bg-[#141414] md:rotate-[5deg] w-[92vw] md:w-fit h-fit flex flex-col gap-[24px] md:gap-[40px] justify-center items-center p-[6vw] md:p-[80px]">
-		<h1 class="font-medium text-[40px] md:text-[64px] text-white font-poppins">{$t('joinTitle')}</h1>
+	<div class="bg-[#141414] md:rotate-[5deg] w-[92vw] md:w-fit h-fit flex flex-col gap-[24px] md:gap-[32px] justify-center items-center p-[6vw] md:p-[48px]">
+		<h1 class="font-medium text-[40px] md:text-[52px] text-white font-poppins">{$t('joinTitle')}</h1>
 		<input
 			type="text"
 			placeholder={$t('joinCodePlaceholder')}
@@ -87,7 +87,7 @@
 		{/if}
 
 		<button
-			class="bg-[#E1FF00] px-[40px] md:px-[100px] py-[14px] md:py-[20px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[64px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out disabled:opacity-60"
+			class="bg-[#E1FF00] px-[40px] md:px-[72px] py-[14px] md:py-[16px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[48px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out disabled:opacity-60"
 			on:click={joinLobby}
 			disabled={loading}
 		>

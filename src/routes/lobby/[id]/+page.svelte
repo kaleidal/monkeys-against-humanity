@@ -191,16 +191,16 @@
 		</div>
 	</div>
 {:else}
-	<div class="relative min-h-screen bg-black p-[6vw] md:p-[80px] text-white overflow-hidden">
+	<div class="relative min-h-screen bg-black p-[6vw] md:p-[40px] text-white overflow-hidden">
 		{#if !isHost}
 			<img src="/illustrations/monsters_lobby_stare.png" alt="Lobby Monsters" class="hidden md:block absolute top-0 left-0 pointer-events-none select-none max-w-[24vw]" />
 			<img src="/illustrations/monsters_lobby_write.svg" alt="Lobby Monsters" class="hidden md:block absolute bottom-[8vh] left-0 pointer-events-none select-none max-w-[30vw]" />
 		{/if}
 
-		<div class="flex flex-col md:flex-row gap-6 md:gap-8 {isHost ? 'justify-center items-start' : 'justify-end items-end'} min-h-[calc(100vh-12vw)] md:min-h-[calc(100vh-160px)]">
+		<div class="mx-auto flex w-full max-w-[1520px] flex-col gap-6 md:h-[calc(100vh-80px)] md:flex-row md:items-stretch md:justify-center md:gap-6">
 			{#if isHost}
-				<section class="flex flex-col gap-[24px] md:gap-[40px] w-full md:w-[30vw] md:h-[85vh]">
-					<div class="flex flex-col gap-[40px] md:gap-[80px] bg-neutral-900 p-[24px] md:p-[60px] flex-1 justify-between">
+				<section class="flex w-full flex-col gap-[20px] md:w-[clamp(300px,28vw,440px)] md:h-full">
+					<div class="flex flex-col gap-[28px] md:gap-[40px] bg-neutral-900 p-[24px] md:p-[36px] flex-1 justify-between">
 						<div class="flex flex-col gap-[10px]">
 							<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyPlayers')}</h1>
 							<Slider min={3} max={10} step={1} bind:value={maxPlayers} />
@@ -213,7 +213,7 @@
 
 						<div class="flex flex-col gap-6 bg-[#282828] px-[20px] md:px-[40px] py-[20px] md:py-[30px]">
 							<div class="flex items-start justify-between gap-6">
-								<h2 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyAnonymousPlayers')}</h2>
+								<h2 class="text-[24px] md:text-[28px] font-normal font-poppins">{$t('lobbyAnonymousPlayers')}</h2>
 								<Toggle bind:checked={allowAnonymous} />
 							</div>
 						</div>
@@ -254,19 +254,19 @@
 				</section>
 			{/if}
 
-			<section class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[60px] py-[24px] md:py-[50px] w-full md:w-[43vw] h-[50vh] md:h-[85vh] overflow-visible z-10">
+			<section class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[36px] py-[24px] md:py-[36px] w-full md:w-[clamp(460px,42vw,700px)] h-[50vh] md:h-full overflow-hidden z-10">
 				<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyCardPacks')}</h1>
 
-				<div class="flex flex-wrap content-start gap-[12px] overflow-y-auto overflow-x-visible scroll-smooth hide-scrollbar px-[6px] py-[6px]">
+				<div class="flex flex-wrap content-start gap-[12px] overflow-y-auto overflow-x-hidden scroll-smooth hide-scrollbar px-[6px] py-[6px] min-h-0">
 					{#each packs as pack}
 						<button
-							class="flex h-[180px] md:h-[220px] w-[calc(50%-6px)] flex-none flex-col items-center justify-center cursor-pointer relative overflow-hidden outline-none focus:outline-none {selectedPacks.includes(pack.key) ? 'ring-4 ring-[#E1FF00]' : 'ring-0'}"
+							class="flex h-[180px] md:h-[190px] w-[calc(50%-6px)] flex-none flex-col items-center justify-center cursor-pointer relative overflow-hidden outline-none focus:outline-none {selectedPacks.includes(pack.key) ? 'ring-4 ring-[#E1FF00]' : 'ring-0'}"
 							style="background-image: url('{getPackBackground(pack.key)}'); background-size: cover; background-position: center;"
 							on:click={() => stateData.viewer?.isHost && togglePack(pack.key)}
 							disabled={!stateData.viewer?.isHost}
 						>
 							<div class="absolute inset-0 bg-black/50"></div>
-							<h1 class="relative z-10 text-[26px] md:text-[40px] font-bold font-poppins text-white text-center px-4">
+							<h1 class="relative z-10 text-[26px] md:text-[34px] font-bold font-poppins text-white text-center px-4">
 								{pack.name}
 							</h1>
 						</button>
@@ -274,8 +274,8 @@
 				</div>
 			</section>
 
-			<section class="flex flex-col gap-4 w-full md:w-[27vw] md:h-[85vh] z-10">
-				<div class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[40px] flex-1 min-h-[50vh] md:min-h-0 overflow-hidden">
+			<section class="flex flex-col gap-4 w-full md:w-[clamp(320px,25vw,420px)] md:h-full z-10">
+				<div class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[32px] flex-1 min-h-[50vh] md:min-h-0 overflow-hidden">
 					<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyJoinedPlayers')}</h1>
 					<div class="flex flex-col gap-4 overflow-y-auto min-h-0 hide-scrollbar">
 						{#each stateData.players as player}
@@ -298,7 +298,7 @@
 					<div class="flex flex-col gap-3 w-full">
 						<button
 							type="button"
-							class="bg-[#E1FF00] px-[40px] md:px-[60px] py-[14px] md:py-[20px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[56px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out"
+							class="bg-[#E1FF00] w-full px-[40px] md:px-[44px] py-[14px] md:py-[16px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[44px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out"
 							on:click={startGame}
 						>
 							{$t('lobbyStartGame')}

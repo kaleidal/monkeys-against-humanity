@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+
+@layer utilities {
+	.font-protest {
+		font-family: 'Protest Guerrilla', sans-serif;
+	}
+
+	.font-poppins {
+		font-family: 'Poppins', sans-serif;
+	}
+
+	.hide-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+
+	.hide-scrollbar {
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+}
+
+html,
+body {
+	background: #090909;
+}
+
+body {
+	color: #ffffff;
+	font-family: 'Poppins', sans-serif;
+}

@@ -5,7 +5,7 @@ const crons = cronJobs();
 
 crons.interval(
   "cleanup inactive lobbies",
-  { hours: 2 },
+  { hours: 24 },
   api.games.cleanupInactiveLobbies,
   {},
 );

@@ -63,9 +63,10 @@
 	}
 </script>
 
-<div class="flex flex-col md:flex-row gap-6 md:gap-8 justify-center items-start min-h-screen bg-black p-[6vw] md:p-[80px] text-white">
-	<section class="flex flex-col md:h-[85vh] gap-[24px] md:gap-[40px] justify-between w-full md:w-auto">
-		<div class="flex flex-col gap-[40px] md:gap-[80px] bg-neutral-900 p-[24px] md:p-[60px] w-full md:w-[30vw] flex-grow justify-between">
+<div class="min-h-screen bg-black p-[6vw] md:p-[40px] text-white">
+	<div class="mx-auto flex w-full max-w-[1300px] flex-col gap-6 md:h-[calc(100vh-80px)] md:flex-row md:items-stretch md:justify-center md:gap-6">
+	<section class="flex w-full flex-col gap-[20px] md:w-[clamp(300px,28vw,440px)] md:h-full">
+		<div class="flex flex-col gap-[28px] md:gap-[40px] bg-neutral-900 p-[24px] md:p-[36px] w-full flex-1 justify-between">
 			<div class="flex flex-col gap-[10px]">
 				<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('createPlayers')}</h1>
 				<Slider min={3} max={10} step={1} bind:value={maxPlayers} />
@@ -79,10 +80,7 @@
 			<div class="flex flex-col gap-6 bg-[#282828] px-[20px] md:px-[40px] py-[20px] md:py-[30px]">
 				<div class="flex items-start justify-between gap-6">
 					<div>
-						<h2 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('createAnonymousPlayers')}</h2>
-						<p class="text-[#8D8D8D] text-[16px] md:text-[18px]">
-							{$t('createAnonymousHelp')}
-						</p>
+						<h2 class="text-[24px] md:text-[28px] font-normal font-poppins">{$t('createAnonymousPlayers')}</h2>
 					</div>
 					<Toggle bind:checked={allowAnonymous} />
 				</div>
@@ -91,7 +89,7 @@
 
 		<button
 			type="button"
-			class="bg-[#E1FF00] px-[40px] md:px-[100px] py-[14px] md:py-[20px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[56px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out disabled:opacity-60"
+			class="bg-[#E1FF00] px-[40px] md:px-[64px] py-[14px] md:py-[16px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[44px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out disabled:opacity-60"
 			on:click={createLobby}
 			disabled={loading}
 		>
@@ -103,7 +101,7 @@
 		{/if}
 	</section>
 
-	<section class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[60px] py-[24px] md:py-[50px] w-full md:w-[43vw] h-[50vh] md:h-[85vh] overflow-visible">
+	<section class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[36px] py-[24px] md:py-[36px] w-full md:w-[clamp(460px,42vw,700px)] h-[50vh] md:h-full overflow-hidden">
 		<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('createCardPacks')}</h1>
 		<input
 			type="text"
@@ -112,19 +110,20 @@
 			bind:value={search}
 		/>
 
-		<div class="flex flex-wrap content-start gap-[12px] overflow-y-auto overflow-x-visible scroll-smooth hide-scrollbar px-[6px] py-[6px]">
+		<div class="flex flex-wrap content-start gap-[12px] overflow-y-auto overflow-x-hidden scroll-smooth hide-scrollbar px-[6px] py-[6px] min-h-0">
 			{#each filteredPacks as pack}
 				<button
-					class="flex h-[180px] md:h-[220px] w-[calc(50%-6px)] flex-none flex-col items-center justify-center cursor-pointer relative overflow-hidden outline-none focus:outline-none {selectedPacks.includes(pack.key) ? 'ring-4 ring-[#E1FF00]' : 'ring-0'}"
+					class="flex h-[180px] md:h-[190px] w-[calc(50%-6px)] flex-none flex-col items-center justify-center cursor-pointer relative overflow-hidden outline-none focus:outline-none {selectedPacks.includes(pack.key) ? 'ring-4 ring-[#E1FF00]' : 'ring-0'}"
 					style="background-image: url('{getPackBackground(pack.key)}'); background-size: cover; background-position: center;"
 					on:click={() => togglePack(pack.key)}
 				>
 					<div class="absolute inset-0 bg-black/50"></div>
-					<h1 class="relative z-10 text-[26px] md:text-[40px] font-bold font-poppins text-white text-center px-4">
+					<h1 class="relative z-10 text-[26px] md:text-[34px] font-bold font-poppins text-white text-center px-4">
 						{pack.name}
 					</h1>
 				</button>
 			{/each}
 		</div>
 	</section>
+</div>
 </div>

@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
+
     export let prompt: string | null = '';
     export let players: Array<{ username: string; user_id: string; score?: number }> = [];
     export let tsarUuid: string = '';
@@ -7,7 +9,7 @@
 
 <div class="w-full min-h-screen bg-[#090909] text-white p-[24px] md:p-[48px] flex flex-col items-center md:items-stretch md:flex-row gap-[24px] md:gap-[6vw] lg:overflow-hidden">
     <section class="flex flex-col gap-3 bg-neutral-900 p-[24px] md:p-[32px] w-full md:w-[22vw] md:self-stretch overflow-y-auto">
-        <h1 class="text-[24px] md:text-[32px] font-normal font-poppins">players</h1>
+        <h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('tsarWaitingPlayers')}</h1>
         {#each players as player}
             <div class="flex flex-row justify-between items-center bg-[#282828] px-4 py-2">
                 <div class="flex items-center gap-2">
@@ -34,9 +36,9 @@
 
     <div class="h-full w-full md:w-[60vw] flex flex-col items-center justify-center gap-[4vw]">
         <div class="h-[300px] md:h-[400px] w-[220px] md:w-[300px] bg-[#E1FF00] rounded-[24px] md:rounded-[40px] flex items-start justify-start p-6 md:p-[40px] text-left">
-            <p class="text-[18px] md:text-[24px] font-poppins text-black font-medium">{prompt || 'Waiting...'}</p>
+            <p class="text-[18px] md:text-[24px] font-poppins text-black font-medium">{prompt || $t('tsarWaitingFallback')}</p>
         </div>
 
-        <h1 class="text-[24px] md:text-[36px] text-white font-poppins font-medium">you're gonna have to wait until everyone finishes..</h1>
+        <h1 class="text-[24px] md:text-[36px] text-white font-poppins font-medium">{$t('tsarWaitingMessage')}</h1>
     </div>
 </div>

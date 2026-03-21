@@ -4,6 +4,7 @@
 	import { api } from '$lib/convexApi';
 	import { getDisplayError } from '$lib/errors';
 	import { createGuestSession, currentUser, saveGuestSession, signIn } from '$lib/auth';
+	import { t } from '$lib/i18n';
 
 	const convex = useConvexClient();
 
@@ -22,7 +23,7 @@
 		code = formatCode(code);
 
 		if (code.length !== 7) {
-			error = 'Enter a 6-character code like ABC-123';
+			error = $t('joinInvalidCode');
 			return;
 		}
 
@@ -47,7 +48,7 @@
 
 			await goto(`/lobby/${lobbyId}`);
 		} catch (err) {
-			error = getDisplayError(err, 'Could not join lobby');
+			error = getDisplayError(err, $t('joinCouldNotJoin'));
 		} finally {
 			loading = false;
 		}
@@ -63,11 +64,11 @@
 	<img src="/illustrations/monsters_join_top.svg" alt="Join Monster" class="hidden md:block absolute top-0 right-0 pointer-events-none max-w-[40vw]" />
 
 	<div class="bg-[#141414] md:rotate-[5deg] w-[92vw] md:w-fit h-fit flex flex-col gap-[24px] md:gap-[40px] justify-center items-center p-[6vw] md:p-[80px]">
-		<h1 class="font-medium text-[40px] md:text-[64px] text-white font-poppins">join a lobby</h1>
+		<h1 class="font-medium text-[40px] md:text-[64px] text-white font-poppins">{$t('joinTitle')}</h1>
 		<input
 			type="text"
-			placeholder="xxx-xxx"
-			class="bg-[#1E1E1E] font-poppins w-full max-w-[520px] px-[20px] md:px-[40px] py-[16px] md:py-[20px] text-white text-[24px] md:text-[36px] focus:outline-none"
+			placeholder={$t('joinCodePlaceholder')}
+			class="bg-[#1E1E1E] font-poppins w-full md:min-w-[520px] px-[20px] md:px-[40px] py-[16px] md:py-[20px] text-white text-[24px] md:text-[36px] focus:outline-none"
 			bind:value={code}
 			on:input={(event) => (code = formatCode((event.currentTarget as HTMLInputElement).value))}
 		/>
@@ -75,8 +76,8 @@
 		{#if !$currentUser}
 			<input
 				type="text"
-				placeholder="nickname"
-				class="bg-[#1E1E1E] font-poppins w-full max-w-[520px] px-[20px] md:px-[40px] py-[16px] md:py-[20px] text-white text-[18px] md:text-[28px] focus:outline-none"
+				placeholder={$t('joinNicknamePlaceholder')}
+				class="bg-[#1E1E1E] font-poppins w-full md:min-w-[520px] px-[20px] md:px-[40px] py-[16px] md:py-[20px] text-white text-[18px] md:text-[28px] focus:outline-none"
 				bind:value={guestName}
 			/>
 		{/if}
@@ -90,14 +91,20 @@
 			on:click={joinLobby}
 			disabled={loading}
 		>
-			{loading ? 'joining...' : 'join lobby'}
+			{loading ? $t('joinJoining') : $t('joinLobby')}
 		</button>
 
-		<button
-			class="font-poppins text-[#A0FF11] text-[16px] md:text-[36px] underline underline-offset-4 cursor-pointer"
-			on:click={goToSignIn}
-		>
-			sign in instead
-		</button>
+		{#if !$currentUser}
+			<button
+				class="font-poppins text-[#A0FF11] text-[16px] md:text-[36px] underline underline-offset-4 cursor-pointer"
+				on:click={goToSignIn}
+			>
+				{$t('joinSignInInstead')}
+			</button>
+		{:else}
+			<p class="font-poppins text-[#A0FF11] text-[16px] md:text-[28px]">
+				{$t('joinLoggedInAs', { name: $currentUser.displayName || $currentUser.handle || $currentUser.id })}
+			</p>
+		{/if}
 	</div>
 </div>

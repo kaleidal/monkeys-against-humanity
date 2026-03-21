@@ -7,6 +7,7 @@
 	import { api } from '$lib/convexApi';
 	import { getDisplayError } from '$lib/errors';
 	import { currentUser, signIn } from '$lib/auth';
+	import { t } from '$lib/i18n';
 
 	const convex = useConvexClient();
 
@@ -38,7 +39,7 @@
 		}
 
 		if (selectedPacks.length === 0) {
-			error = 'Pick at least one pack';
+			error = $t('createPickAtLeastOnePack');
 			return;
 		}
 
@@ -55,7 +56,7 @@
 
 			await goto(`/lobby/${lobbyId}`);
 		} catch (err) {
-			error = getDisplayError(err, 'Could not create lobby');
+			error = getDisplayError(err, $t('createCouldNotCreateLobby'));
 		} finally {
 			loading = false;
 		}
@@ -66,21 +67,21 @@
 	<section class="flex flex-col md:h-[85vh] gap-[24px] md:gap-[40px] justify-between w-full md:w-auto">
 		<div class="flex flex-col gap-[40px] md:gap-[80px] bg-neutral-900 p-[24px] md:p-[60px] w-full md:w-[30vw] flex-grow justify-between">
 			<div class="flex flex-col gap-[10px]">
-				<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">players</h1>
+				<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('createPlayers')}</h1>
 				<Slider min={3} max={10} step={1} bind:value={maxPlayers} />
 			</div>
 
 			<div class="flex flex-col gap-[10px]">
-				<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">rounds</h1>
+				<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('createRounds')}</h1>
 				<Slider min={4} max={24} step={4} bind:value={maxRounds} />
 			</div>
 
 			<div class="flex flex-col gap-6 bg-[#282828] px-[20px] md:px-[40px] py-[20px] md:py-[30px]">
 				<div class="flex items-start justify-between gap-6">
 					<div>
-						<h2 class="text-[24px] md:text-[32px] font-normal font-poppins">anonymous players</h2>
+						<h2 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('createAnonymousPlayers')}</h2>
 						<p class="text-[#8D8D8D] text-[16px] md:text-[18px]">
-							Let people join with just a nickname.
+							{$t('createAnonymousHelp')}
 						</p>
 					</div>
 					<Toggle bind:checked={allowAnonymous} />
@@ -94,7 +95,7 @@
 			on:click={createLobby}
 			disabled={loading}
 		>
-			{loading ? 'opening...' : $currentUser ? 'open lobby' : 'sign in'}
+			{loading ? $t('createOpening') : $currentUser ? $t('createOpenLobby') : $t('createSignIn')}
 		</button>
 
 		{#if error}
@@ -103,10 +104,10 @@
 	</section>
 
 	<section class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[60px] py-[24px] md:py-[50px] w-full md:w-[43vw] h-[50vh] md:h-[85vh] overflow-visible">
-		<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">card packs</h1>
+		<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('createCardPacks')}</h1>
 		<input
 			type="text"
-			placeholder="search card packs..."
+			placeholder={$t('createSearchPacks')}
 			class="bg-[#1E1E1E] font-poppins w-full px-[16px] md:px-[20px] py-[12px] md:py-[15px] text-white text-[18px] md:text-[24px] focus:outline-none"
 			bind:value={search}
 		/>

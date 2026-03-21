@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
+
     export let packsKeys: string[] = [];
     export let prompt: string | null = '';
     export let onSelect: (a: string) => void = () => {};
@@ -34,7 +36,7 @@
 
 <div class="w-full min-h-screen bg-[#090909] text-white p-[24px] md:p-[48px] flex flex-col md:flex-row gap-[24px] md:gap-[6vw]">
     <section class="flex flex-col gap-3 bg-neutral-900 p-[24px] md:p-[32px] w-full md:w-[22vw] md:self-stretch overflow-y-auto">
-        <h1 class="text-[24px] md:text-[32px] font-normal font-poppins">players</h1>
+        <h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('tsarWaitingPlayers')}</h1>
         {#each players as player}
             <div class="flex flex-row justify-between items-center bg-[#282828] px-4 py-2">
                 <div class="flex items-center gap-2">

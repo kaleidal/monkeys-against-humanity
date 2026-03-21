@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount, tick } from 'svelte';
     import { getSessionSnapshot, signIn } from '$lib/auth';
+    import { t } from '$lib/i18n';
 
     type Piece = {
         id: string
@@ -283,7 +284,7 @@
             <img src="/logo.svg" alt="Logo" class="w-[min(72vw,640px)] max-w-[90%]" />
             <div class="flex items-center gap-3 text-neutral-300">
                 <div class="h-6 w-6 rounded-full border-2 border-neutral-600 border-t-white animate-spin"></div>
-                <span class="text-sm tracking-wide">Loading assets...</span>
+                <span class="text-sm tracking-wide">{$t('homeLoadingAssets')}</span>
             </div>
         </div>
     {:else}
@@ -294,7 +295,7 @@
                 onclick={handleNewGame}
             >
                 <span class="flex items-center gap-4">
-                  <span>new game</span>
+                  <span>{$t('homeNewGame')}</span>
                 </span>
             </button>
             <button
@@ -303,7 +304,7 @@
                 onclick={() => { window.location.href = "/lobby/join" }}
             >
                 <span class="flex items-center gap-4 text-center">
-                  <span>join</span>
+                  <span>{$t('homeJoin')}</span>
                 </span>
             </button>
         </div>

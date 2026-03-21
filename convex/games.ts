@@ -67,6 +67,38 @@ async function getPlayers(ctx: any, lobbyId: string) {
 		.collect();
 }
 
+async function touchLobby(ctx: any, lobbyId: any) {
+	await ctx.db.patch(lobbyId, { lastActivityAt: Date.now() });
+}
+
+async function deleteLobbyCascade(ctx: any, lobbyId: any) {
+	const players = await ctx.db
+		.query('players')
+		.withIndex('by_lobby', (q: any) => q.eq('lobbyId', lobbyId))
+		.collect();
+	for (const player of players) {
+		await ctx.db.delete(player._id);
+	}
+
+	const rounds = await ctx.db
+		.query('rounds')
+		.withIndex('by_lobby', (q: any) => q.eq('lobbyId', lobbyId))
+		.collect();
+	for (const round of rounds) {
+		await ctx.db.delete(round._id);
+	}
+
+	const submissions = await ctx.db
+		.query('submissions')
+		.collect();
+	for (const submission of submissions) {
+		if (submission.lobbyId !== lobbyId) continue;
+		await ctx.db.delete(submission._id);
+	}
+
+	await ctx.db.delete(lobbyId);
+}
+
 async function resolveViewer(ctx: any, lobbyId: string, guestId?: string, guestSecret?: string) {
 	const identity = await ctx.auth.getUserIdentity();
 
@@ -128,7 +160,8 @@ async function createRound(ctx: any, lobby: any, roundNumber: number) {
 
 	await ctx.db.patch(lobby._id, {
 		currentRoundId: roundId,
-		status: 'in_game'
+		status: 'in_game',
+		lastActivityAt: Date.now()
 	});
 
 	return roundId;
@@ -164,7 +197,8 @@ export const createLobby = mutationGeneric({
 			maxRounds: args.maxRounds,
 			allowAnonymous: args.allowAnonymous,
 			cardPacks: args.cardPacks,
-			createdAt: Date.now()
+			createdAt: Date.now(),
+			lastActivityAt: Date.now()
 		});
 
 		await ctx.db.insert('players', {
@@ -211,6 +245,7 @@ export const joinLobby = mutationGeneric({
 
 			if (existing) {
 				await ctx.db.patch(existing._id, { username: user.name });
+				await touchLobby(ctx, lobby._id);
 				return lobby._id;
 			}
 
@@ -225,6 +260,7 @@ export const joinLobby = mutationGeneric({
 				isAnonymous: false,
 				joinedAt: Date.now()
 			});
+			await touchLobby(ctx, lobby._id);
 
 			return lobby._id;
 		}
@@ -249,6 +285,7 @@ export const joinLobby = mutationGeneric({
 			}
 
 			await ctx.db.patch(existingGuest._id, { username: name });
+			await touchLobby(ctx, lobby._id);
 			return lobby._id;
 		}
 
@@ -263,6 +300,7 @@ export const joinLobby = mutationGeneric({
 			isAnonymous: true,
 			joinedAt: Date.now()
 		});
+		await touchLobby(ctx, lobby._id);
 
 		return lobby._id;
 	}
@@ -286,7 +324,8 @@ export const updateLobbySettings = mutationGeneric({
 			maxPlayers: args.maxPlayers,
 			maxRounds: args.maxRounds,
 			allowAnonymous: args.allowAnonymous,
-			cardPacks: args.cardPacks
+			cardPacks: args.cardPacks,
+			lastActivityAt: Date.now()
 		});
 	}
 });
@@ -311,7 +350,7 @@ export const startGame = mutationGeneric({
 		if (!lobby.currentRoundId) {
 			await createRound(ctx, lobby, 1);
 		} else {
-			await ctx.db.patch(lobby._id, { status: 'in_game' });
+			await ctx.db.patch(lobby._id, { status: 'in_game', lastActivityAt: Date.now() });
 		}
 	}
 });
@@ -336,6 +375,7 @@ export const selectPrompt = mutationGeneric({
 			prompt: args.prompt,
 			status: 'submitting'
 		});
+		await touchLobby(ctx, lobby._id);
 	}
 });
 
@@ -385,6 +425,7 @@ export const submitAnswer = mutationGeneric({
 		if (submissions.length >= Math.max(0, players.length - 1)) {
 			await ctx.db.patch(round._id, { status: 'judging' });
 		}
+		await touchLobby(ctx, lobby._id);
 
 		return submissionId;
 	}
@@ -418,6 +459,7 @@ export const pickWinner = mutationGeneric({
 			status: 'reveal',
 			winningSubmissionId: submission._id
 		});
+		await touchLobby(ctx, lobby._id);
 	}
 });
 
@@ -441,11 +483,43 @@ export const advanceRound = mutationGeneric({
 		}
 
 		if (round.roundNumber >= lobby.maxRounds) {
-			await ctx.db.patch(lobby._id, { status: 'finished' });
+			await ctx.db.patch(lobby._id, { status: 'finished', lastActivityAt: Date.now() });
 			return;
 		}
 
 		await createRound(ctx, lobby, round.roundNumber + 1);
+	}
+});
+
+export const cleanupInactiveLobbies = mutationGeneric({
+	args: {},
+	handler: async (ctx) => {
+		const now = Date.now();
+		const WAITING_MAX_AGE_MS = 30 * 60 * 1000;
+		const IN_GAME_MAX_AGE_MS = 2 * 60 * 60 * 1000;
+		const FINISHED_MAX_AGE_MS = 60 * 60 * 1000;
+		const EMPTY_WAITING_MAX_AGE_MS = 5 * 60 * 1000;
+
+		const lobbies = await ctx.db.query('lobbies').collect();
+		let deleted = 0;
+
+		for (const lobby of lobbies) {
+			const players = await getPlayers(ctx, lobby._id);
+			const activityAt = lobby.lastActivityAt ?? lobby.createdAt;
+			const inactiveMs = now - activityAt;
+
+			const shouldDelete =
+				(lobby.status === 'waiting' && players.length === 0 && inactiveMs >= EMPTY_WAITING_MAX_AGE_MS) ||
+				(lobby.status === 'waiting' && inactiveMs >= WAITING_MAX_AGE_MS) ||
+				(lobby.status === 'in_game' && inactiveMs >= IN_GAME_MAX_AGE_MS) ||
+				(lobby.status === 'finished' && inactiveMs >= FINISHED_MAX_AGE_MS);
+
+			if (!shouldDelete) continue;
+			await deleteLobbyCascade(ctx, lobby._id);
+			deleted += 1;
+		}
+
+		return { deleted };
 	}
 });
 

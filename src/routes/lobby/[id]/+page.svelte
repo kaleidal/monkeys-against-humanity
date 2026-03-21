@@ -9,6 +9,7 @@
 	import { getGuestSession } from '$lib/auth';
 	import { getDisplayError } from '$lib/errors';
 	import { getPackBackground, packs } from '$lib/packs';
+	import { t } from '$lib/i18n';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -66,7 +67,7 @@
 				);
 			} catch (nextError) {
 				if (!active) return;
-				stateError = new Error(getDisplayError(nextError, 'Could not load lobby'));
+				stateError = new Error(getDisplayError(nextError, $t('lobbyCouldNotLoad')));
 				pageLoading = false;
 			}
 		}
@@ -154,7 +155,7 @@
 			lastSavedSettings = serializeSettings(maxPlayers, maxRounds, allowAnonymous, selectedPacks);
 			dirty = false;
 		} catch (err) {
-			error = getDisplayError(err, 'Could not save settings');
+			error = getDisplayError(err, $t('lobbyCouldNotSave'));
 		} finally {
 			saving = false;
 		}
@@ -176,7 +177,7 @@
 			error = '';
 			await convex.mutation(api.games.startGame, { lobbyId });
 		} catch (err) {
-			error = getDisplayError(err, 'Could not start game');
+			error = getDisplayError(err, $t('lobbyCouldNotStart'));
 		}
 	}
 </script>
@@ -186,7 +187,7 @@
 {:else if stateError || !stateData}
 	<div class="min-h-screen bg-black flex items-center justify-center p-10">
 		<div class="bg-[#141414] p-10 text-white font-poppins">
-			{stateError?.message || 'Lobby not found'}
+			{stateError?.message || $t('lobbyNotFound')}
 		</div>
 	</div>
 {:else}
@@ -201,30 +202,30 @@
 				<section class="flex flex-col gap-[24px] md:gap-[40px] w-full md:w-[30vw] md:h-[85vh]">
 					<div class="flex flex-col gap-[40px] md:gap-[80px] bg-neutral-900 p-[24px] md:p-[60px] flex-1 justify-between">
 						<div class="flex flex-col gap-[10px]">
-							<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">players</h1>
+							<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyPlayers')}</h1>
 							<Slider min={3} max={10} step={1} bind:value={maxPlayers} />
 						</div>
 
 						<div class="flex flex-col gap-[10px]">
-							<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">rounds</h1>
+							<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyRounds')}</h1>
 							<Slider min={4} max={24} step={4} bind:value={maxRounds} />
 						</div>
 
 						<div class="flex flex-col gap-6 bg-[#282828] px-[20px] md:px-[40px] py-[20px] md:py-[30px]">
 							<div class="flex items-start justify-between gap-6">
-								<h2 class="text-[24px] md:text-[32px] font-normal font-poppins">anonymous players</h2>
+								<h2 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyAnonymousPlayers')}</h2>
 								<Toggle bind:checked={allowAnonymous} />
 							</div>
 						</div>
 
 						<div class="flex w-full flex-col gap-[10px] items-center justify-center bg-[#282828] px-[20px] md:px-[40px] py-[14px] md:py-[20px]">
-							<h1 class="text-xl md:text-2xl font-normal font-poppins">lobby code</h1>
+							<h1 class="text-xl md:text-2xl font-normal font-poppins">{$t('lobbyLobbyCode')}</h1>
 							<div class="flex flex-row gap-[10px] items-center">
 								<h1 class="text-[28px] md:text-[36px] text-[#E1FF00] font-medium font-poppins">
 									{stateData.lobby.code}
 								</h1>
 								<button
-									aria-label="copy"
+									aria-label={$t('lobbyCopy')}
 									class="cursor-pointer text-[#E1FF00] flex items-center justify-center w-[22px] h-[22px] md:w-[28px] md:h-[28px]"
 									on:click={() => navigator.clipboard.writeText(stateData.lobby.code)}
 								>
@@ -254,7 +255,7 @@
 			{/if}
 
 			<section class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[60px] py-[24px] md:py-[50px] w-full md:w-[43vw] h-[50vh] md:h-[85vh] overflow-visible z-10">
-				<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">card packs</h1>
+				<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyCardPacks')}</h1>
 
 				<div class="flex flex-wrap content-start gap-[12px] overflow-y-auto overflow-x-visible scroll-smooth hide-scrollbar px-[6px] py-[6px]">
 					{#each packs as pack}
@@ -275,18 +276,18 @@
 
 			<section class="flex flex-col gap-4 w-full md:w-[27vw] md:h-[85vh] z-10">
 				<div class="flex flex-col gap-4 bg-neutral-900 p-[24px] md:p-[40px] flex-1 min-h-[50vh] md:min-h-0 overflow-hidden">
-					<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">joined players</h1>
+					<h1 class="text-[24px] md:text-[32px] font-normal font-poppins">{$t('lobbyJoinedPlayers')}</h1>
 					<div class="flex flex-col gap-4 overflow-y-auto min-h-0 hide-scrollbar">
 						{#each stateData.players as player}
 							<div class="flex flex-row justify-between items-center bg-[#282828] px-[18px] md:px-[25px] py-[12px] md:py-[15px]">
 								<div class="flex items-center gap-3">
 									<h1 class="text-xl md:text-2xl font-normal font-poppins">{player.username}</h1>
 									{#if player.isAnonymous}
-										<span class="text-[#A0A0A0] text-sm">guest</span>
+										<span class="text-[#A0A0A0] text-sm">{$t('lobbyGuest')}</span>
 									{/if}
 								</div>
 								{#if player.isHost}
-									<img src="/icons/crown.svg" alt="host crown" class="w-[20px] h-[20px] md:w-[24px] md:h-[24px] pointer-events-none select-none" />
+									<img src="/icons/crown.svg" alt={$t('lobbyHostCrown')} class="w-[20px] h-[20px] md:w-[24px] md:h-[24px] pointer-events-none select-none" />
 								{/if}
 							</div>
 						{/each}
@@ -300,7 +301,7 @@
 							class="bg-[#E1FF00] px-[40px] md:px-[60px] py-[14px] md:py-[20px] cursor-pointer hover:rounded-full text-black font-poppins text-[40px] md:text-[56px] flex items-center justify-center tracking-wide select-none active:scale-[0.98] ease-in-out"
 							on:click={startGame}
 						>
-							start game
+							{$t('lobbyStartGame')}
 						</button>
 					</div>
 				{/if}

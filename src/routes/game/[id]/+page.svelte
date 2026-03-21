@@ -12,6 +12,7 @@
 	import { getGuestSession } from '$lib/auth';
 	import { api } from '$lib/convexApi';
 	import { getDisplayError } from '$lib/errors';
+	import { t } from '$lib/i18n';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -59,7 +60,7 @@
 				);
 			} catch (nextError) {
 				if (!active) return;
-				stateError = new Error(getDisplayError(nextError, 'Could not load game'));
+				stateError = new Error(getDisplayError(nextError, $t('gameCouldNotLoad')));
 				pageLoading = false;
 			}
 		}
@@ -126,7 +127,7 @@
 {:else if stateError || !stateData?.lobby}
 	<div class="min-h-screen bg-black flex items-center justify-center p-10">
 		<div class="bg-[#141414] p-10 text-white font-poppins">
-			{stateError?.message || 'Game not found'}
+			{stateError?.message || $t('gameNotFound')}
 		</div>
 	</div>
 {:else if stateData.lobby.status === 'finished'}
@@ -139,7 +140,7 @@
 	{:else}
 		<div class="w-full h-screen flex flex-col justify-center items-center">
 			<h1 class="text-[32px] font-normal text-white font-poppins text-center">
-				{tsarPlayer?.username || 'The Tsar'} is choosing a prompt...
+				{$t('gameTsarIsChoosing', { name: tsarPlayer?.username || $t('gameTsarDefaultName') })}
 			</h1>
 		</div>
 	{/if}
@@ -153,8 +154,8 @@
 		/>
 	{:else if mySubmitted}
 		<div class="min-h-screen text-white bg-black flex flex-col items-center justify-center gap-3">
-			<div class="text-[32px]">Waiting for other players to submit...</div>
-			<div class="text-[24px] text-[#E1FF00]">You have submitted your card.</div>
+			<div class="text-[32px]">{$t('gameWaitingForPlayers')}</div>
+			<div class="text-[24px] text-[#E1FF00]">{$t('gameYouSubmitted')}</div>
 		</div>
 	{:else}
 		<PlayerChooseCard

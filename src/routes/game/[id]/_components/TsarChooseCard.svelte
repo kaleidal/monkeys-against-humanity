@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
+
     let { packsKeys = [] as string[], onSelect = ((_: string) => {}) } = $props();
 
     const modules = import.meta.glob('/src/packs/*.ts', { eager: true });
@@ -29,8 +31,8 @@
 
 <div class="w-full min-h-screen bg-[#090909] flex flex-col items-center justify-center gap-[60px] p-[100px] relative overflow-hidden select-none">
     <div class="flex flex-col items-center justify-center gap-[20px]">
-        <h1 class="text-[64px] font-normal text-white font-poppins self-center">you are the tsar.</h1>
-        <h1 class="text-[28px] font-normal text-white font-poppins self-center">pick a card. any card...</h1>
+        <h1 class="text-[64px] font-normal text-white font-poppins self-center">{$t('tsarChooseTitle')}</h1>
+        <h1 class="text-[28px] font-normal text-white font-poppins self-center">{$t('tsarChooseSubtitle')}</h1>
     </div>
 
     <div class="flex flex-row gap-[40px] w-full">

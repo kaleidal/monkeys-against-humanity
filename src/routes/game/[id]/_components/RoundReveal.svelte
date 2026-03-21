@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
+
     export let submissions: Array<{
         id: string;
         answer: string;
@@ -36,7 +38,7 @@
 
         <div class="inset-0 flex flex-col items-center justify-center">
           <span class="text-[96px] font-poppins w-[50vw] font-medium text-white">
-            {winnerPlayer.username} wins the round!
+            {$t('roundRevealWinsRound', { name: winnerPlayer.username })}
           </span>
 
             {#if canContinue}
@@ -45,7 +47,7 @@
                     disabled={loading}
                     onclick={onNext}
                 >
-                    {loading ? 'Starting...' : 'Next round'}
+                    {loading ? $t('roundRevealStarting') : $t('roundRevealNextRound')}
                 </button>
                 {#if errorMsg}
                     <span class="text-red-400 text-sm font-mono">{errorMsg}</span>

@@ -20,7 +20,8 @@ export default defineSchema({
 		allowAnonymous: v.boolean(),
 		cardPacks: v.array(v.string()),
 		currentRoundId: v.optional(v.id('rounds')),
-		createdAt: v.number()
+		createdAt: v.number(),
+		lastActivityAt: v.number()
 	})
 		.index('by_code', ['code'])
 		.index('by_host', ['hostUserId']),

@@ -4,6 +4,7 @@
 	import { PUBLIC_CONVEX_URL } from '$env/static/public';
 	import { auth } from '$lib/auth';
 	import { api } from '$lib/convexApi';
+	import LanguageSelect from '../components/LanguageSelect.svelte';
 
 	const convexUrl = PUBLIC_CONVEX_URL || '';
 
@@ -34,4 +35,5 @@
 	<title>Monkeys Against Humanity</title>
 </svelte:head>
 
+<LanguageSelect />
 <slot />
